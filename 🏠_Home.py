@@ -116,7 +116,113 @@ with tab1:
         st.plotly_chart(fig, use_container_width=True)
 
     with network:
-        pass
+        # Sample DataFrame Generation
+        drugs = ['DrugA', 'DrugB', 'DrugC', 'DrugD', 'DrugE']
+        data = []
+
+        for drug in drugs:
+            for i in range(1, 101):
+                data.append([drug, f'Target{i}', random.uniform(0, 1)])
+
+        df = pd.DataFrame(data, columns=['Drugs', 'Target', 'Hscore'])
+
+        # Streamlit App
+        st.title("Interactive Drug-Target Interaction Visualization")
+
+        # Step 1: Drug Selection
+        selected_drug = st.selectbox("Select a Drug", df['Drugs'].unique())
+
+        # Step 2: Hscore threshold slider
+        hscore_threshold = st.slider("Select Hscore threshold", min_value=0.0, max_value=1.0, value=0.8, step=0.01)
+
+        # Step 3: Filter the DataFrame for the selected drug and Hscore threshold
+        filtered_df = df[(df['Drugs'] == selected_drug) & (df['Hscore'] > hscore_threshold)]
+
+        # Step 4: Display the filtered DataFrame
+        st.write(f"Filtered Data for {selected_drug} with Hscore > {hscore_threshold}:")
+        st.write(filtered_df)
+
+        # Step 5: Create a graph (edges and nodes) using the filtered data
+        if not filtered_df.empty:
+            # Create graph
+            G = nx.Graph()
+
+            # Add nodes (drug and targets)
+            G.add_node(selected_drug, type='drug', color='#C24A3A')  # Red pentagon for the drug
+            for _, row in filtered_df.iterrows():
+                target = row['Target']
+                hscore = row['Hscore']
+                G.add_node(target, type='target', color='#145975')  # Green circle for each target
+                G.add_edge(selected_drug, target, weight=hscore)  # Create an edge with Hscore as weight
+
+            # Step 6: Create a Plotly figure for network visualization
+            pos = nx.spring_layout(G)
+
+            # Create edge traces for each edge, with hover information for Hscore
+            edge_x = []
+            edge_y = []
+            edge_text = []
+            for edge in G.edges(data=True):
+                x0, y0 = pos[edge[0]]
+                x1, y1 = pos[edge[1]]
+                edge_x.extend([x0, x1, None])
+                edge_y.extend([y0, y1, None])
+                edge_text.append(f'Hscore: {edge[2]["weight"]:.2f}')  # Hscore on hover
+
+            edge_trace = go.Scatter(
+                x=edge_x, y=edge_y,
+                line=dict(width=2, color='blue'),
+                hoverinfo='text',
+                # text=edge_text,
+                mode='lines'
+            )
+
+            # Create node traces for drugs and targets separately
+            node_x = []
+            node_y = []
+            node_color = []
+            node_text = []
+            node_shape = []
+
+            for node in G.nodes(data=True):
+                x, y = pos[node[0]]
+                node_x.append(x)
+                node_y.append(y)
+                node_color.append('red' if node[1]['type'] == 'drug' else 'green')
+                node_text.append(node[0])  # Node name on hover
+                node_shape.append('star' if node[1]['type'] == 'drug' else 'circle')
+
+            node_trace = go.Scatter(
+                x=node_x, y=node_y,
+                mode='markers+text',
+                hoverinfo='text',
+                marker=dict(
+                    showscale=False,
+                    color=node_color,
+                    size=20,
+                    line_width=2,
+                    symbol=['star' if shape == 'star' else 'circle' for shape in node_shape]  # Shape for drugs/targets
+                ),
+                # text=node_text
+            )
+
+            # Step 7: Layout and plot using Plotly
+            fig = go.Figure(data=[edge_trace, node_trace],
+                            layout=go.Layout(
+                                title=f'Drug-Target Network for {selected_drug}',
+                                titlefont_size=16,
+                                showlegend=False,
+                                hovermode='closest',
+                                margin=dict(b=0, l=0, r=0, t=40),
+                                xaxis=dict(showgrid=False, zeroline=False),
+                                yaxis=dict(showgrid=False, zeroline=False))
+                            )
+
+            st.plotly_chart(fig)
+
+        else:
+            st.write(f"No data available for {selected_drug} with Hscore > {hscore_threshold}.")
+
 
     # --------------------------------------------------------------------------------------------------------------------------------------------------------
     left_col, media_col, right_col = st.columns([1, 0.1, 1])
