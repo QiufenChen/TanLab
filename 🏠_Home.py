@@ -19,13 +19,7 @@ my_df['-log10P.Value'] = my_df['P.Value'].apply(lambda x: -np.log10(x))
 files = {
     "primary-screen-readme.txt": "./Data/primary-screen-readme.txt",
     "primary-screen-cell-line-info.csv": "./Data/primary-screen-cell-line-info.csv",
-    "primary-screen-pooling-info.csv": "./Data/primary-screen-pooling-info.csv",
-    "primary-screen-logfold-change.csv": "./Data/primary-screen-logfold-change.csv",
-    "primary-screen-primary-mfi.csv": "./Data/primary-screen-primary-mfi.csv",
-    "primary-screen-replicate-collapsed-logfold-change.csv": "./Data/primary-screen-replicate-collapsed-logfold-change.csv",
-    "primary-screen-replicate-collapsed-treatment-info.csv": "./Data/primary-screen-replicate-collapsed-treatment-info.csv",
-    "primary-screen-replicate-treatment-info.csv": "./Data/primary-screen-replicate-treatment-info.csv"
-}
+    "primary-screen-pooling-info.csv": "./Data/primary-screen-pooling-info.csv"}
 
 
 # 顶部导航栏
