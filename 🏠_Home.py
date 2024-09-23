@@ -127,9 +127,6 @@ with tab1:
 
         df = pd.DataFrame(data, columns=['Drugs', 'Target', 'Hscore'])
 
-        # Streamlit App
-        st.title("Interactive Drug-Target Interaction Visualization")
-
         # Step 1: Drug Selection
         selected_drug = st.selectbox("Select a Drug", df['Drugs'].unique())
 
