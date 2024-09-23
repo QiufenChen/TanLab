@@ -9,4 +9,3 @@ py3Dmol
 ipython_genutils
  plotly
 networkx
-random
