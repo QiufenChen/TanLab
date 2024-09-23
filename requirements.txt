@@ -1,0 +1,11 @@
+numpy
+pandas
+scipy
+matplotlib
+seaborn
+streamlit
+stmol
+py3Dmol
+ipython_genutils
+ plotly
+networkx
