@@ -84,7 +84,8 @@ with landscape:
                             y='Pvalue', 
                             color='Hscore', 
                             labels={'x': 'logFC', 'y': 'Pvalue', 'target':'Targets'},
-                            color_continuous_scale=px.colors.diverging.RdBu,
+                            # color_continuous_scale=px.colors.diverging.RdBu,
+                            color_continuous_scale="reds",
                             hover_data={'Targets': True}
                             )
         fig.update_traces(marker_size=12)
