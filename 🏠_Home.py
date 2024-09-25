@@ -315,6 +315,7 @@ with right_col:
 # with tab2:
     # st.subheader("Contact Us")
 st.divider()
+st.subheader("Contact Us")
 st.write("""🎈 Please feel free to contact us with any issues, comments, or questions.""")
 
 # st.text_area("**Message**")
