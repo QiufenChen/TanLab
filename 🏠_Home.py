@@ -53,7 +53,7 @@ with st.container():
     with col3:
         # 右侧放置实验室logo
         # image = Image("C:/Users/17608/Desktop/MyAPP/figures/logo.jpg")
-        st.image("images/logo.jpg", width=400)
+        st.image("images/logo.jpg", width=200)
 
 
 #%%
