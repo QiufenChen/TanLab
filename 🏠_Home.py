@@ -22,7 +22,7 @@ np.random.seed(42)
 # df = pd.DataFrame(data, columns=['Drugs', 'Targets', 'Hscore', 'logFC', 'Pvalue'])
 # ===========================================================================================
 
-df = pd.read_excel("./data/Top100.xlsx")
+df = pd.read_excel("./Data/Top100.xlsx")
 print(df.columns)
 col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drugs']
 df.columns = col_names
