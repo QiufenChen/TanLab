@@ -133,7 +133,7 @@ with network1:
     filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
 
     # 绘制火山图
-    col1, col2, col3 = st.columns([0.5, 5, 1])
+    col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
         
         # Create graph
@@ -269,8 +269,7 @@ with network2:
     selected_hscore = col333.slider(':chestnut: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
     filtered_df = prot_df[(prot_df['Gene'] == selected_target) & (prot_df['Hscore'] > selected_hscore)]
 
-    # 绘制火山图
-    col1, col2, col3 = st.columns([0.5, 5, 1])
+    col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
         
         # Create graph
