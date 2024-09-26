@@ -68,7 +68,7 @@ landscape, network1, network2 = st.tabs(["1️⃣ Scatter Plot", "2️⃣ Networ
 with landscape:
     col1, col2, col3 = st.columns([1, 0.1, 1])
     selected_drug = col1.selectbox(":four_leaf_clover: Select a Drug", drug_df['Drugs'].unique())
-    selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
+    selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
     filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
 
     # 绘制火山图
@@ -129,7 +129,7 @@ with network1:
     selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drugs'].unique())
     layout= col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
     # selected_hscore = col33.text_input('Set Hscore threshold')
-    selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
+    selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
     filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
 
     # 绘制火山图
@@ -266,7 +266,7 @@ with network2:
     selected_target = col111.selectbox(":seedling: Select a Target", prot_df['Gene'].unique())
     layout= col222.selectbox(':palm_tree: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
     # selected_hscore = col33.text_input('Set Hscore threshold')
-    selected_hscore = col333.slider(':chestnut: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
+    selected_hscore = col333.slider(':chestnut: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
     filtered_df = prot_df[(prot_df['Gene'] == selected_target) & (prot_df['Hscore'] > selected_hscore)]
 
     # 绘制火山图
