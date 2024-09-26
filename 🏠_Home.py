@@ -41,12 +41,12 @@ with st.container():
     with col2:
         # 中间列放置标题和作者
         st.markdown(
-            "<h1 style='text-align: center; color: black; background-color: white;'>Discovering the anti-cancer potential of non-oncology drugs by systematic viability profiling</h1>",
+            "<h1 style='text-align: center; color: black; background-color: white;'>Our Title</h1>",
             unsafe_allow_html=True)
 
         st.markdown("""
         <p style='text-align: center; color: black; background-color: white;'>
-        Corsello SM, Nagari RT, Spangler RD, Rossen J, Kocak M, Bryan JG, Humeidi R, Peck D, Wu X, Tang AA, Wang VM, Bender SA, Lemire E, Narayan R, Montgomery P, Ben-David U, Garvie CW, Chen Y, Rees MG, Lyons NJ, McFarland JM, Wong BT, Wang L, Dumont N, O'Hearn PJ, Stefan E, Doench JG, Harrington CN, Greulich H, Meyerson M, Vazquez F, Subramanian A, Roth JA, Bittker JA, Boehm JS, Mader CC, Tsherniak A, Golub TR
+        Our authors
         </p>
         """, unsafe_allow_html=True)
 
@@ -59,7 +59,7 @@ with st.container():
 #%%
 st.subheader("Abstract")
 st.write("""
-Anti-cancer uses of non-oncology drugs have occasionally been found, but such discoveries have been serendipitous. We sought to create a public resource containing the growth inhibitory activity of 4,518 drugs tested across 578 human cancer cell lines. We used PRISM, a molecular barcoding method, to screen drugs against cell lines in pools. An unexpectedly large number of non-oncology drugs selectively inhibited subsets of cancer cell lines in a manner predictable from the cell lines' molecular features. Our findings include compounds that killed by inducing PDE3A-SLFN12 complex formation; vanadium-containing compounds whose killing depended on the sulfate transporter SLC26A2; the alcohol dependence drug disulfiram, which killed cells with low expression of metallothioneins; and the anti-inflammatory drug tepoxalin, which killed via the multi-drug resistance protein ABCB1. The PRISM drug repurposing resource ([link](https://depmap.org/repurposing)) is a starting point to develop new oncology therapeutics, and more rarely, for potential direct clinical translation.
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 """)
 
 landscape, network1, network2 = st.tabs(["1️⃣ Scatter Plot", "2️⃣ Network Interaction (Drug)", "3️⃣ Network Interaction (Target)"])
@@ -99,22 +99,6 @@ with landscape:
     else:
         col2.write('No results found.')
 
-# with biomarker:
-#     # reference ----> https://plotly.com/python/box-plots/
-#     swarm_df = px.data.tips()
-#     fig = px.strip(swarm_df, x='day', y='tip')
-#     fig.update_layout(
-#         margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
-#         autosize=False,
-#         width=500,  # 你可以设置图表的宽度
-#         height=400,
-#         title_x=0.5,  # 设置标题居中
-#         xaxis_title_font=dict(size=20),  # x轴标题字体大小
-#         yaxis_title_font=dict(size=20),  # y轴标题字体大小
-#         xaxis_tickfont=dict(size=18),  # x轴刻度字体大小
-#         yaxis_tickfont=dict(size=18)  # y轴刻度字体大小
-#     )
-#     st.plotly_chart(fig, use_container_width=True)
 
 #%%
 with network1:
