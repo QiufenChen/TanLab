@@ -35,10 +35,10 @@ drug_list = drug_counts_sorted.index.tolist()[:21]
 drug_df = df[df['Drugs'].isin(drug_list)]
 
 # 筛选出前20的靶点
-prot_counts = df['Targets'].value_counts()
+prot_counts = df['Gene'].value_counts()
 prot_counts_sorted = prot_counts.sort_values(ascending=False)
 prot_list = prot_counts_sorted.index.tolist()[:21]
-prot_df = df[df['Targets'].isin(drug_list)]
+prot_df = df[df['Gene'].isin(drug_list)]
 
 # 假设你有一个字典，存储文件名和文件路径
 files = {
@@ -87,7 +87,7 @@ with tab1:
     with landscape:
         col1, col2, col3 = st.columns([1, 0.1, 1])
         selected_drug = col1.selectbox(":four_leaf_clover: Select a Drug", drug_df['Drugs'].unique())
-        selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.5, max_value=1.0, value=0.8, step=0.01)
+        selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
         filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
 
         # 绘制火山图
@@ -97,10 +97,10 @@ with tab1:
                                 x='logFC', 
                                 y='logPvalue', 
                                 color='Hscore', 
-                                labels={'x': 'logFC', 'y': 'logPvalue', 'target':'Targets'},
+                                labels={'x': 'logFC', 'y': 'logPvalue', 'target':'Gene'},
                                 # color_continuous_scale=px.colors.diverging.RdBu,
                                 color_continuous_scale="reds",
-                                hover_data={'Targets': True}
+                                hover_data={'Gene': True}
                                 )
             fig.update_traces(marker_size=12)
             fig.update_layout(
@@ -144,11 +144,11 @@ with tab1:
 
     with network1:
         col11, col22, col33 = st.columns([1, 1, 1])
-        selected_drug = col11.selectbox(":maple_leaf: Select a Drug", df['Drugs'].unique())
+        selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drugs'].unique())
         layout= col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
         # selected_hscore = col33.text_input('Set Hscore threshold')
         selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.5, max_value=1.0, value=0.8, step=0.01)
-        filtered_df = df[(df['Drugs'] == selected_drug) & (df['Hscore'] > selected_hscore)]
+        filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
 
         # 绘制火山图
         col1, col2, col3 = st.columns([0.5, 5, 1])
@@ -162,10 +162,10 @@ with tab1:
             for index, row in filtered_df.iterrows():
                 if row['Drugs'] not in G.nodes():
                     G.add_node(row['Drugs'], type='drug')  # Drug节点添加颜色和大小
-                if row['Targets'] not in G.nodes():
-                    G.add_node(row['Targets'], type='target', score=row['Hscore'])  # Target节点为圆形
-                if not G.has_edge(row['Drugs'], row['Targets']):
-                    G.add_weighted_edges_from([(row['Drugs'], row['Targets'], row['Hscore'])])
+                if row['Gene'] not in G.nodes():
+                    G.add_node(row['Gene'], type='target', score=row['Hscore'])  # Target节点为圆形
+                if not G.has_edge(row['Drugs'], row['Gene']):
+                    G.add_weighted_edges_from([(row['Drugs'], row['Gene'], row['Hscore'])])
                     
                     # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])  
                     # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])
@@ -280,11 +280,11 @@ with tab1:
 
     with network2:
         col111, col222, col333 = st.columns([1, 1, 1])
-        selected_target = col111.selectbox(":seedling: Select a Target", df['Targets'].unique())
+        selected_target = col111.selectbox(":seedling: Select a Target", prot_df['Gene'].unique())
         layout= col222.selectbox(':palm_tree: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
         # selected_hscore = col33.text_input('Set Hscore threshold')
         selected_hscore = col333.slider(':chestnut: Set Hscore threshold', min_value=0.5, max_value=1.0, value=0.8, step=0.01)
-        filtered_df = df[(df['Targets'] == selected_target) & (df['Hscore'] > selected_hscore)]
+        filtered_df = prot_df[(prot_df['Gene'] == selected_target) & (prot_df['Hscore'] > selected_hscore)]
 
         # 绘制火山图
         col1, col2, col3 = st.columns([0.5, 5, 1])
@@ -298,10 +298,10 @@ with tab1:
             for index, row in filtered_df.iterrows():
                 if row['Drugs'] not in G.nodes():
                     G.add_node(row['Drugs'], type='drug', score=row['Hscore'])  # Drug节点添加颜色和大小
-                if row['Targets'] not in G.nodes():
-                    G.add_node(row['Targets'], type='target')  # Target节点为圆形
-                if not G.has_edge(row['Targets'], row['Drugs']):
-                    G.add_weighted_edges_from([(row['Targets'], row['Drugs'], row['Hscore'])])
+                if row['Gene'] not in G.nodes():
+                    G.add_node(row['Gene'], type='target')  # Target节点为圆形
+                if not G.has_edge(row['Gene'], row['Drugs']):
+                    G.add_weighted_edges_from([(row['Gene'], row['Drugs'], row['Hscore'])])
                     
                     # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])  
                     # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])
