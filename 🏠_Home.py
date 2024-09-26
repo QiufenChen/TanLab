@@ -380,7 +380,7 @@ with network2:
 #%%
 st.divider()
 st.subheader("Contact Us")
-st.write("""🎈 Please feel free to contact christan@sustech.edu.cn with any issues, comments, or questions.""")
+st.write("""🎈 Please feel free to contact us with any issues, comments, or questions.""")
 
 st.text_area("**Message**")
 st.text_input("**Your Email**")
