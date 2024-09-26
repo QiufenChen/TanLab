@@ -244,16 +244,16 @@ with network1:
                                             titlefont=dict(size=25),
                                             showlegend=False,
                                             hovermode='closest',
-                                        #  margin=dict(b=20,l=5,r=5,t=40),
+                                            #  margin=dict(b=20,l=5,r=5,t=40),
                                             # margin=dict(b=5,l=5,r=5,t=5),
                                             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                                             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)))
 
         fig.update_layout(
-        # margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
+        margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
         autosize=False,
-        width=500,  # 你可以设置图表的宽度
-        height=500)
+        width=800,  # 你可以设置图表的宽度
+        height=800)
         col2.plotly_chart(fig, use_container_width=True)  
 
     else:
@@ -286,8 +286,6 @@ with network2:
             if not G.has_edge(row['Gene'], row['Drugs']):
                 G.add_weighted_edges_from([(row['Gene'], row['Drugs'], row['Hscore'])])
                 
-                # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])  
-                # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])
         
         # 获取节点位置
         #Get the position of each node depending on the user' choice of layout
@@ -382,16 +380,16 @@ with network2:
                                             titlefont=dict(size=25),
                                             showlegend=False,
                                             hovermode='closest',
-                                            margin=dict(b=20,l=5,r=5,t=40),
+                                            # margin=dict(b=20,l=5,r=5,t=40),
                                             # margin=dict(b=5,l=5,r=5,t=5),
                                             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                                             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False)))
 
         fig.update_layout(
-        # margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
+        margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
         autosize=False,
-        # width=500,  # 你可以设置图表的宽度
-        # height=500
+        width=800,  # 你可以设置图表的宽度
+        height=800
         )
         col2.plotly_chart(fig, use_container_width=True)  
 
