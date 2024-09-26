@@ -94,13 +94,6 @@ with landscape:
         yaxis_title_font=dict(size=20, weight='bold'),  # y轴标题字体大小
         xaxis_tickfont=dict(size=18),  # x轴刻度字体大小
         yaxis_tickfont=dict(size=18),)
-        # xaxis=dict(showgrid=True, zeroline=True, showticklabels=True),
-        # yaxis=dict(showgrid=True, zeroline=True, showticklabels=True))  # y轴刻度字体大小
-    
-        # fig.add_shape(type="line",
-        #         x0=0, y0=0, x1=0, y1=max(filtered_df['logPvalue']),
-        #         line=dict(color='#EAEAEA', width=2, dash="dot"),
-        #         name="x=0 line")
         
         col2.plotly_chart(fig, use_container_width=True)
     else:
@@ -204,6 +197,7 @@ with network1:
                                             colorbar=dict(
                                                         title="Hscore",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
+                                                        thickness=10,  # 设置颜色条的厚度
                                                         # tickmode="array",  # 自定义刻度
                                                         # tickvals=[0, 1],  # 刻度值，例如最低和最高的Hscore
                                                         # ticktext=["Low", "High"],  # 对应的标签
@@ -338,6 +332,7 @@ with network2:
                                             colorbar=dict(
                                                         title="Hscore",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
+                                                        thickness=10,  # 设置颜色条的厚度
                                                         # tickmode="array",  # 自定义刻度
                                                         # tickvals=[0, 1],  # 刻度值，例如最低和最高的Hscore
                                                         # ticktext=["Low", "High"],  # 对应的标签
