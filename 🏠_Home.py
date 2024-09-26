@@ -23,7 +23,6 @@ st.set_page_config(page_title="TanLab", layout="wide")
 # ===========================================================================================
 
 df = pd.read_excel("./Data/Top100.xlsx")
-print(df.columns)
 col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drugs']
 df.columns = col_names
 df['UniprotURL'] = [f'https://www.uniprot.org/uniprotkb/{item}/entry' for item in df['Targets']]
@@ -38,7 +37,8 @@ drug_df = df[df['Drugs'].isin(drug_list)]
 prot_counts = df['Gene'].value_counts()
 prot_counts_sorted = prot_counts.sort_values(ascending=False)
 prot_list = prot_counts_sorted.index.tolist()[:21]
-prot_df = df[df['Gene'].isin(drug_list)]
+prot_df = df[df['Gene'].isin(prot_list)]
+# print(df.head(10))
 
 # 假设你有一个字典，存储文件名和文件路径
 files = {
