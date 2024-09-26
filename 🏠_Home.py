@@ -252,8 +252,8 @@ with network1:
         fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
         autosize=False,
-        width=800,  # 你可以设置图表的宽度
-        height=800)
+        width=500,  # 你可以设置图表的宽度
+        height=500)
         col2.plotly_chart(fig, use_container_width=True)  
 
     else:
@@ -388,8 +388,8 @@ with network2:
         fig.update_layout(
         margin=dict(l=0, r=0, t=0, b=0),  # 去掉左右和上下的边距
         autosize=False,
-        width=800,  # 你可以设置图表的宽度
-        height=800
+        width=500,  # 你可以设置图表的宽度
+        height=500
         )
         col2.plotly_chart(fig, use_container_width=True)  
 
