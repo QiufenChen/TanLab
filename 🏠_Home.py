@@ -197,7 +197,8 @@ with network1:
                                             colorbar=dict(
                                                         title="Hscore",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
-                                                        thickness=10,  # 设置颜色条的厚度
+                                                        thickness=15,  # 设置颜色条的厚度
+                                                        len=0.5,
                                                         # tickmode="array",  # 自定义刻度
                                                         # tickvals=[0, 1],  # 刻度值，例如最低和最高的Hscore
                                                         # ticktext=["Low", "High"],  # 对应的标签
@@ -332,7 +333,8 @@ with network2:
                                             colorbar=dict(
                                                         title="Hscore",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
-                                                        thickness=10,  # 设置颜色条的厚度
+                                                        thickness=15,  # 设置颜色条的厚度
+                                                        len=0.5,
                                                         # tickmode="array",  # 自定义刻度
                                                         # tickvals=[0, 1],  # 刻度值，例如最低和最高的Hscore
                                                         # ticktext=["Low", "High"],  # 对应的标签
