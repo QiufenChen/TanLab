@@ -8,7 +8,7 @@ import networkx as nx
 np.random.seed(42)
 
 # Page configure
-st.set_page_config(page_title="📊", layout="centered")
+st.set_page_config(page_title="📊", layout="wide")
 
 # # ===========================================================================================
 # # 生成模拟数据
