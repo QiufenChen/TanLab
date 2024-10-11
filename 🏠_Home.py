@@ -81,10 +81,10 @@ with landscape:
     col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
         fig = px.scatter(filtered_df, 
-                            x='logFC', 
-                            y='logPvalue', 
+                            x='fc', 
+                            y='log_pvalue', 
                             color='H-Score', 
-                            labels={'x': 'logFC', 'y': 'logPvalue', 'target':'Gene'},
+                            labels={'x': 'fc', 'y': 'log_pvalue', 'target':'Gene'},
                             # color_continuous_scale=px.colors.diverging.RdBu,
                             color_continuous_scale="reds",
                             hover_data={'Gene': True}
