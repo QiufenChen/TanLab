@@ -19,7 +19,7 @@ df_filtered = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
 
 #%%
 # df = pd.read_excel("./Data/Top100.xlsx")
-# col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drugs']
+# col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drug']
 # df.columns = col_names
 # df['UniprotURL'] = [f'https://www.uniprot.org/uniprotkb/{item}/entry' for item in df['Targets']]
 
@@ -73,7 +73,7 @@ landscape, network1, network2 = st.tabs(["1️⃣ Scatter Plot", "2️⃣ Networ
 #%%
 with landscape:
     col1, col2, col3 = st.columns([1, 0.1, 1])
-    selected_drug = col1.selectbox(":four_leaf_clover: Select a Drug", drug_df['Drugs'].unique())
+    selected_drug = col1.selectbox(":four_leaf_clover: Select a Drug", drug_df['Drug'].unique())
     selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
@@ -109,11 +109,11 @@ with landscape:
 #%%
 with network1:
     col11, col22, col33 = st.columns([1, 1, 1])
-    selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drugs'].unique())
+    selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drug'].unique())
     layout= col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
     # selected_hscore = col33.text_input('Set Hscore threshold')
     selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
-    filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
+    filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
     # 绘制火山图
     col1, col2, col3 = st.columns([2, 5, 2])
@@ -122,18 +122,18 @@ with network1:
         # Create graph
         G = nx.Graph()
 
-        # 添加节点和边 'Drugs', 'Target', 'Hscore', 'logFC', 'logPvalue'
+        # 添加节点和边 'Drug', 'Target', 'Hscore', 'logFC', 'logPvalue'
         
         for index, row in filtered_df.iterrows():
-            if row['Drugs'] not in G.nodes():
-                G.add_node(row['Drugs'], type='drug')  # Drug节点添加颜色和大小
+            if row['Drug'] not in G.nodes():
+                G.add_node(row['Drug'], type='drug')  # Drug节点添加颜色和大小
             if row['Gene'] not in G.nodes():
                 G.add_node(row['Gene'], type='target', score=row['H-Score'])  # Target节点为圆形
-            if not G.has_edge(row['Drugs'], row['Gene']):
-                G.add_weighted_edges_from([(row['Drugs'], row['Gene'], row['H-Score'])])
+            if not G.has_edge(row['Drug'], row['Gene']):
+                G.add_weighted_edges_from([(row['Drug'], row['Gene'], row['H-Score'])])
                 
-                # G.add_edge(row['Drugs'], row['Targets'], weight=row['H-Score'])  
-                # G.add_edge(row['Drugs'], row['Targets'], weight=row['H-Score'])
+                # G.add_edge(row['Drug'], row['Targets'], weight=row['H-Score'])  
+                # G.add_edge(row['Drug'], row['Targets'], weight=row['H-Score'])
         
         # 获取节点位置
         #Get the position of each node depending on the user' choice of layout
@@ -204,7 +204,7 @@ with network1:
             node_trace['text'] += tuple([node])  # Node labels
             node_type = G.nodes[node]['type']
             if node_type == 'drug':
-                node_trace['marker']['symbol'] += tuple(['star'])   # Star shape for drugs
+                node_trace['marker']['symbol'] += tuple(['star'])   # Star shape for Drug
                 node_trace['marker']['color'] += tuple(['red'])  # Red color for drug nodes
                 node_trace['marker']['size'] += tuple([25])  # Fixed size for drug nodes
             elif node_type == 'target':
@@ -260,15 +260,15 @@ with network2:
         # Create graph
         G = nx.Graph()
 
-        # 添加节点和边 'Drugs', 'Target', 'Hscore', 'logFC', 'logPvalue'
+        # 添加节点和边 'Drug', 'Target', 'Hscore', 'logFC', 'logPvalue'
         
         for index, row in filtered_df.iterrows():
-            if row['Drugs'] not in G.nodes():
-                G.add_node(row['Drugs'], type='drug', score=row['H-Score'])  # Drug节点添加颜色和大小
+            if row['Drug'] not in G.nodes():
+                G.add_node(row['Drug'], type='drug', score=row['H-Score'])  # Drug节点添加颜色和大小
             if row['Gene'] not in G.nodes():
                 G.add_node(row['Gene'], type='target')  # Target节点为圆形
-            if not G.has_edge(row['Gene'], row['Drugs']):
-                G.add_weighted_edges_from([(row['Gene'], row['Drugs'], row['H-Score'])])
+            if not G.has_edge(row['Gene'], row['Drug']):
+                G.add_weighted_edges_from([(row['Gene'], row['Drug'], row['H-Score'])])
                 
         
         # 获取节点位置
@@ -340,7 +340,7 @@ with network2:
             node_trace['text'] += tuple([node])  # Node labels
             node_type = G.nodes[node]['type']
             if node_type == 'target':
-                node_trace['marker']['symbol'] += tuple(['circle'])   # Star shape for drugs
+                node_trace['marker']['symbol'] += tuple(['circle'])   # Star shape for Drug
                 node_trace['marker']['color'] += tuple(['#156082'])  # Red color for drug nodes
                 node_trace['marker']['size'] += tuple([25])  # Fixed size for drug nodes
             elif node_type == 'drug':
