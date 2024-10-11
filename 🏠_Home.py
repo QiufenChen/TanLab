@@ -86,9 +86,9 @@ with landscape:
         fig.update_traces(marker_size=12)
         fig.update_layout(
         margin=dict(l=0, r=0, t=2, b=0),  # 去掉左右和上下的边距
-        autosize=False,
+        autosize=True,
         width=1000,   # 设置图表的宽度
-        height=500,
+        height=450,
         # title_x=0.5,  # 设置标题居中
         xaxis_title_font=dict(size=20, weight='bold'),  # x轴标题字体大小
         yaxis_title_font=dict(size=20, weight='bold'),  # y轴标题字体大小
