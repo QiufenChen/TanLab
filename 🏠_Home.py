@@ -18,25 +18,18 @@ df = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
 
 
 #%%
-# df = pd.read_excel("./Data/Top100.xlsx")
-# col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drug']
-# df.columns = col_names
-# df['UniprotURL'] = [f'https://www.uniprot.org/uniprotkb/{item}/entry' for item in df['Targets']]
-
-
-#%%
-drug_counts = df['Drug'].value_counts()
-drug_counts_sorted = drug_counts.sort_values(ascending=False)
-drug_list = drug_counts_sorted.index.tolist()[:21]
-drug_df = df[df['Drug'].isin(drug_list)]
-
+# drug_counts = df['Drug'].value_counts()
+# drug_counts_sorted = drug_counts.sort_values(ascending=False)
+# drug_list = drug_counts_sorted.index.tolist()[:21]
+# drug_df = df[df['Drug'].isin(drug_list)]
+drug_df = df
 
 #%%
-prot_counts = df['Gene'].value_counts()
-prot_counts_sorted = prot_counts.sort_values(ascending=False)
-prot_list = prot_counts_sorted.index.tolist()[:21]
-prot_df = df[df['Gene'].isin(prot_list)]
-
+# prot_counts = df['Gene'].value_counts()
+# prot_counts_sorted = prot_counts.sort_values(ascending=False)
+# prot_list = prot_counts_sorted.index.tolist()[:21]
+# prot_df = df[df['Gene'].isin(prot_list)]
+prot_df = df
 
 #%%
 with st.container():
