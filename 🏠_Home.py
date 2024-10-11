@@ -11,18 +11,24 @@ np.random.seed(42)
 st.set_page_config(page_title="📊", layout="wide")
 
 
-#%%
-df = pd.read_excel("./Data/Top100.xlsx")
-col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drugs']
-df.columns = col_names
-df['UniprotURL'] = [f'https://www.uniprot.org/uniprotkb/{item}/entry' for item in df['Targets']]
+df = pd.read_excel("./Data/OurData.xlsx")
+idx = df.groupby(['Group', 'Drug', 'DrugName', 'Protein_ID', 'Gene'])['H-Score'].idxmax()
+df_unique = df.loc[idx]
+df_filtered = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
 
 
 #%%
-drug_counts = df['Drugs'].value_counts()
+# df = pd.read_excel("./Data/Top100.xlsx")
+# col_names = ['Targets', 'Gene', 'logFC', 'logPvalue', 'logAdjPvalue', 'Class', 'Hscore', 'Drugs']
+# df.columns = col_names
+# df['UniprotURL'] = [f'https://www.uniprot.org/uniprotkb/{item}/entry' for item in df['Targets']]
+
+
+#%%
+drug_counts = df['Drug'].value_counts()
 drug_counts_sorted = drug_counts.sort_values(ascending=False)
 drug_list = drug_counts_sorted.index.tolist()[:21]
-drug_df = df[df['Drugs'].isin(drug_list)]
+drug_df = df[df['Drug'].isin(drug_list)]
 
 
 #%%
@@ -69,7 +75,7 @@ with landscape:
     col1, col2, col3 = st.columns([1, 0.1, 1])
     selected_drug = col1.selectbox(":four_leaf_clover: Select a Drug", drug_df['Drugs'].unique())
     selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
-    filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
+    filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
     # 绘制火山图
     col1, col2, col3 = st.columns([2, 5, 2])
@@ -77,7 +83,7 @@ with landscape:
         fig = px.scatter(filtered_df, 
                             x='logFC', 
                             y='logPvalue', 
-                            color='Hscore', 
+                            color='H-Score', 
                             labels={'x': 'logFC', 'y': 'logPvalue', 'target':'Gene'},
                             # color_continuous_scale=px.colors.diverging.RdBu,
                             color_continuous_scale="reds",
@@ -107,7 +113,7 @@ with network1:
     layout= col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
     # selected_hscore = col33.text_input('Set Hscore threshold')
     selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
-    filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['Hscore'] > selected_hscore)]
+    filtered_df = drug_df[(drug_df['Drugs'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
     # 绘制火山图
     col1, col2, col3 = st.columns([2, 5, 2])
@@ -122,12 +128,12 @@ with network1:
             if row['Drugs'] not in G.nodes():
                 G.add_node(row['Drugs'], type='drug')  # Drug节点添加颜色和大小
             if row['Gene'] not in G.nodes():
-                G.add_node(row['Gene'], type='target', score=row['Hscore'])  # Target节点为圆形
+                G.add_node(row['Gene'], type='target', score=row['H-Score'])  # Target节点为圆形
             if not G.has_edge(row['Drugs'], row['Gene']):
-                G.add_weighted_edges_from([(row['Drugs'], row['Gene'], row['Hscore'])])
+                G.add_weighted_edges_from([(row['Drugs'], row['Gene'], row['H-Score'])])
                 
-                # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])  
-                # G.add_edge(row['Drugs'], row['Targets'], weight=row['Hscore'])
+                # G.add_edge(row['Drugs'], row['Targets'], weight=row['H-Score'])  
+                # G.add_edge(row['Drugs'], row['Targets'], weight=row['H-Score'])
         
         # 获取节点位置
         #Get the position of each node depending on the user' choice of layout
@@ -179,7 +185,7 @@ with network1:
                                             symbol =[],
                                             colorscale='blues',  # RdBu
                                             colorbar=dict(
-                                                        title="Hscore",  # 颜色条的标题
+                                                        title="H-Score",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
                                                         thickness=15,  # 设置颜色条的厚度
                                                         len=0.8,
@@ -246,7 +252,7 @@ with network2:
     layout= col222.selectbox(':palm_tree: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
     # selected_hscore = col33.text_input('Set Hscore threshold')
     selected_hscore = col333.slider(':chestnut: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.85, step=0.01)
-    filtered_df = prot_df[(prot_df['Gene'] == selected_target) & (prot_df['Hscore'] > selected_hscore)]
+    filtered_df = prot_df[(prot_df['Gene'] == selected_target) & (prot_df['H-Score'] > selected_hscore)]
 
     col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
@@ -258,11 +264,11 @@ with network2:
         
         for index, row in filtered_df.iterrows():
             if row['Drugs'] not in G.nodes():
-                G.add_node(row['Drugs'], type='drug', score=row['Hscore'])  # Drug节点添加颜色和大小
+                G.add_node(row['Drugs'], type='drug', score=row['H-Score'])  # Drug节点添加颜色和大小
             if row['Gene'] not in G.nodes():
                 G.add_node(row['Gene'], type='target')  # Target节点为圆形
             if not G.has_edge(row['Gene'], row['Drugs']):
-                G.add_weighted_edges_from([(row['Gene'], row['Drugs'], row['Hscore'])])
+                G.add_weighted_edges_from([(row['Gene'], row['Drugs'], row['H-Score'])])
                 
         
         # 获取节点位置
@@ -315,7 +321,7 @@ with network2:
                                             symbol =[],
                                             colorscale='reds',  # RdBu
                                             colorbar=dict(
-                                                        title="Hscore",  # 颜色条的标题
+                                                        title="H-Score",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
                                                         thickness=15,  # 设置颜色条的厚度
                                                         len=0.8,
