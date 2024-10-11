@@ -11,10 +11,10 @@ np.random.seed(42)
 st.set_page_config(page_title="📊", layout="wide")
 
 
-df = pd.read_excel("./Data/OurData.xlsx")
-idx = df.groupby(['Group', 'Drug', 'DrugName', 'Protein_ID', 'Gene'])['H-Score'].idxmax()
-df_unique = df.loc[idx]
-df_filtered = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
+my_df = pd.read_excel("./Data/OurData.xlsx")
+idx = my_df.groupby(['Group', 'Drug', 'DrugName', 'Protein_ID', 'Gene'])['H-Score'].idxmax()
+df_unique = my_df.loc[idx]
+df = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
 
 
 #%%
