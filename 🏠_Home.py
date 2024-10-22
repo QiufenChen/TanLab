@@ -123,7 +123,7 @@ with network1:
         df_pairs = similarity_df[similarity_df['Similarity'] >= selected_smilarity]
         for index, row in df_pairs.iterrows():
             if row['Protein1'] in G.nodes() and row['Protein2'] in G.nodes():
-                G.add_edge(row['Protein1'], row['Protein2'], weight=row['Similarity'])
+                G.add_edge(row['Protein1'], row['Protein2'], weight=row['Similarity'], type='similarity')
 
         
         # Get the position of each node depending on the user' choice of layout
@@ -147,6 +147,13 @@ with network1:
                                 hoverinfo='none', 
                                 mode='lines')
         
+        # Create a trace of protein similarity edges
+        similarity_edge_trace = go.Scatter(x=[], 
+                                           y=[], 
+                                           line=dict(width=1, color='red', dash='dash'),  
+                                           hoverinfo='none', 
+                                           mode='lines')
+        
         weights = [data['weight'] for _, _, data in G.edges(data=True)]
         min_weight = min(weights)
         max_weight = max(weights)
@@ -156,8 +163,15 @@ with network1:
         for edge in G.edges(data=True):
             x0, y0 = G.nodes[edge[0]]['pos']
             x1, y1 = G.nodes[edge[1]]['pos']
-            edge_trace['x'] += tuple([x0, x1, None])
-            edge_trace['y'] += tuple([y0, y1, None])
+            # edge_trace['x'] += tuple([x0, x1, None])
+            # edge_trace['y'] += tuple([y0, y1, None])
+
+            if edge[2]['type'] == 'similarity':  
+                similarity_edge_trace['x'] += tuple([x0, x1, None])
+                similarity_edge_trace['y'] += tuple([y0, y1, None])
+            else:  
+                edge_trace['x'] += tuple([x0, x1, None])
+                edge_trace['y'] += tuple([y0, y1, None])
         
 
 
