@@ -18,6 +18,8 @@ df_unique = my_df.loc[idx]
 df = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
 df['fc'] = df.apply(lambda row: -abs(row['fc']) if row['lasso_score'] == 0 else row['fc'], axis=1)
 
+uniprot_to_gene = dict(zip(df['Protein_ID'], df['Gene']))
+
 drug_df = df
 prot_df = df
 
@@ -120,9 +122,10 @@ with network1:
                 
 
         # Screen the protein-protein pairs that meet the threshold from the similarity table and add them to the network
-        df_pairs = similarity_df[similarity_df['Similarity'] >= selected_smilarity]
+        df_pairs = similarity_df[similarity_df['Similarity'].astype(float) >= selected_smilarity]
         for index, row in df_pairs.iterrows():
-            if row['Protein1'] in G.nodes() and row['Protein2'] in G.nodes():
+            if uniprot_to_gene[row['Protein1']] in G.nodes() and uniprot_to_gene[row['Protein2']] in G.nodes():
+                print(row['Protein1'], row['Protein2'])
                 G.add_edge(row['Protein1'], row['Protein2'], weight=row['Similarity'], type='similarity')
 
         
@@ -166,6 +169,7 @@ with network1:
             # edge_trace['x'] += tuple([x0, x1, None])
             # edge_trace['y'] += tuple([y0, y1, None])
 
+            # print(edge[2].get('type'))
             if edge[2].get('type') == 'similarity':  
                 similarity_edge_trace['x'] += tuple([x0, x1, None])
                 similarity_edge_trace['y'] += tuple([y0, y1, None])
