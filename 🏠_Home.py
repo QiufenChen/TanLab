@@ -4,6 +4,7 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from matplotlib import cm 
+import matplotlib.colors as mcolors
 import networkx as nx
 np.random.seed(42)
 
@@ -67,6 +68,11 @@ with landscape:
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
     # Plot vocalo
+    colorscale = [
+                [0, 'rgb(252, 183, 156)'],  
+                [0.5, 'rgb(232, 52, 41)'],  
+                [1, 'rgb(107, 1, 13)']        
+                ]
     col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
         fig = px.scatter(filtered_df, 
@@ -75,7 +81,7 @@ with landscape:
                             color='H-Score', 
                             labels={'x': 'fc', 'y': 'log_pvalue', 'target':'Gene'},
                             # color_continuous_scale=px.colors.diverging.RdBu,
-                            color_continuous_scale="reds",
+                            color_continuous_scale=colorscale,   #"reds"
                             hover_data={'Gene': True}
                             )
         fig.update_traces(marker_size=12)
@@ -99,7 +105,7 @@ with landscape:
 with network1:
     col11, col22, col33, col44 = st.columns([1, 1, 1, 1])
     selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drug'].unique())
-    layout = col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
+    layout = col22.selectbox(':fallen_leaf: Choose a network layout',('Kamada Kawai Layout','Random Layout','Spring Layout','Shell Layout'))
     selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
     selected_smilarity = col44.slider('Set similarity threshold', min_value=30, max_value=100, value=50, step=5)
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
@@ -125,19 +131,20 @@ with network1:
         df_pairs = similarity_df[similarity_df['Similarity'].astype(float) >= selected_smilarity]
         for index, row in df_pairs.iterrows():
             if uniprot_to_gene[row['Protein1']] in G.nodes() and uniprot_to_gene[row['Protein2']] in G.nodes():
-                print(row['Protein1'], row['Protein2'])
-                G.add_edge(row['Protein1'], row['Protein2'], weight=row['Similarity'], type='similarity')
+                # print(row['Protein1'], row['Protein2'])
+                G.add_edge(uniprot_to_gene[row['Protein1']], uniprot_to_gene[row['Protein2']], weight=row['Similarity'], type='similarity')
 
         
         # Get the position of each node depending on the user' choice of layout
-        if layout=='Random Layout':
+        if layout=='Kamada Kawai Layout':
+            pos = nx.kamada_kawai_layout(G) 
+        elif layout=='Random Layout':
             pos = nx.random_layout(G) 
         elif layout=='Spring Layout':
             pos = nx.spring_layout(G, k=0.5, iterations=50)
         elif layout=='Shell Layout':
             pos = nx.shell_layout(G)            
-        elif layout=='Kamada Kawai Layout':
-            pos = nx.kamada_kawai_layout(G) 
+
         
         # Add positions of nodes to the graph
         for n, p in pos.items():
@@ -146,14 +153,14 @@ with network1:
         # Create an edge trace
         edge_trace = go.Scatter(x=[], 
                                 y=[], 
-                                line=dict(width=2, color='#EFEFEF'),
+                                line=dict(width=1.5, color='#B0AFAE'), ##EFEFEF    
                                 hoverinfo='none', 
                                 mode='lines')
         
         # Create a trace of protein similarity edges
         similarity_edge_trace = go.Scatter(x=[], 
                                            y=[], 
-                                           line=dict(width=1, color='red', dash='dash'),  
+                                           line=dict(width=1.5, color='#D7D7D7', dash='dash'),  
                                            hoverinfo='none', 
                                            mode='lines')
         
@@ -169,8 +176,10 @@ with network1:
             # edge_trace['x'] += tuple([x0, x1, None])
             # edge_trace['y'] += tuple([y0, y1, None])
 
-            # print(edge[2].get('type'))
+            print(edge[2].get('type'))
             if edge[2].get('type') == 'similarity':  
+                print("Similarity edge coordinates:", similarity_edge_trace['x'], similarity_edge_trace['y'])
+
                 similarity_edge_trace['x'] += tuple([x0, x1, None])
                 similarity_edge_trace['y'] += tuple([y0, y1, None])
             else:  
@@ -180,6 +189,11 @@ with network1:
 
 
         # Adding nodes to plotly scatter plot
+        colorscale = [
+                        [0, 'rgb(175, 210, 231)'],   # 浅蓝
+                        [0.5, 'rgb(35, 98, 146)'],  # 中间蓝
+                        [1, 'rgb(6, 45, 103)']        # 深蓝
+                     ]
         node_trace = go.Scatter(x=[], 
                                 y=[], 
                                 text=[], 
@@ -191,7 +205,7 @@ with network1:
                                             size=[],
                                             color=[],
                                             symbol =[],
-                                            colorscale='blues',  # RdBu
+                                            colorscale=colorscale,  # RdBu / blues
                                             colorbar=dict(
                                                         title="H-Score",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
@@ -231,7 +245,7 @@ with network1:
             node_trace['text'] += tuple([node_info])
 
         # 创建Plotly图表
-        fig = go.Figure(data=[edge_trace, node_trace], 
+        fig = go.Figure(data=[edge_trace, similarity_edge_trace, node_trace], 
                         layout=go.Layout(title='', # title takes input from the user
                                             title_x=0.45,
                                             titlefont=dict(size=25),
@@ -257,7 +271,7 @@ with network1:
 with network2:
     col111, col222, col333 = st.columns([1, 1, 1])
     selected_target = col111.selectbox(":seedling: Select a Target", prot_df['Gene'].unique())
-    layout= col222.selectbox(':palm_tree: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
+    layout= col222.selectbox(':palm_tree: Choose a network layout',('Kamada Kawai Layout', 'Random Layout','Spring Layout','Shell Layout'))
     # selected_hscore = col33.text_input('Set Hscore threshold')
     selected_hscore = col333.slider(':chestnut: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
     filtered_df = prot_df[(prot_df['Gene'] == selected_target) & (prot_df['H-Score'] > selected_hscore)]
@@ -316,6 +330,11 @@ with network2:
 
 
         # Adding nodes to plotly scatter plot
+        colorscale = [
+                [0, 'rgb(252, 183, 156)'],  
+                [0.5, 'rgb(232, 52, 41)'],  
+                [1, 'rgb(107, 1, 13)']        
+                ]
         node_trace = go.Scatter(x=[], 
                                 y=[], 
                                 text=[], 
@@ -327,7 +346,7 @@ with network2:
                                             size=[],
                                             color=[],
                                             symbol =[],
-                                            colorscale='reds',  # RdBu
+                                            colorscale=colorscale,  # RdBu 'reds'
                                             colorbar=dict(
                                                         title="H-Score",  # 颜色条的标题
                                                         titleside="top",  # 标题在右边
