@@ -166,7 +166,7 @@ with network1:
             # edge_trace['x'] += tuple([x0, x1, None])
             # edge_trace['y'] += tuple([y0, y1, None])
 
-            if edge[2]['type'] == 'similarity':  
+            if edge[2].get('type') == 'similarity':  
                 similarity_edge_trace['x'] += tuple([x0, x1, None])
                 similarity_edge_trace['y'] += tuple([y0, y1, None])
             else:  
