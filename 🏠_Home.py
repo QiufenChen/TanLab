@@ -103,11 +103,36 @@ with landscape:
 
 #%% Drug-Protein
 with network1:
+
+    st.markdown(
+        """
+        <style>
+        /* 第一个滑动条的样式 (Hscore) */
+        div[data-baseweb="slider"] div[role="slider"] {
+            background-color: #1f77b4; /* 修改背景色 */
+            border-radius: 50%;
+        }
+
+        /* 第二个滑动条的样式 (Similarity) */
+        div[data-testid="stSlider"] > div:nth-child(3) > div > div {
+            background-color: #ff7f0e; /* 修改轨道背景色 */
+        }
+
+        /* 修改滑动条的滑块颜色 */
+        div[data-testid="stSlider"] > div:nth-child(3) > div > div > div {
+            background-color: #2ca02c; /* 滑块颜色 */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
     col11, col22, col33, col44 = st.columns([1, 1, 1, 1])
     selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drug'].unique())
     layout = col22.selectbox(':fallen_leaf: Choose a network layout',('Kamada Kawai Layout','Random Layout','Spring Layout','Shell Layout'))
     selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
-    selected_smilarity = col44.slider(':palm_tree: Set similarity threshold', min_value=30, max_value=100, value=50, step=5)
+    selected_smilarity = col44.slider(':palm_tree: Set similarity threshold', min_value=25, max_value=100, value=40, step=5)
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
     col1, col2, col3 = st.columns([2, 5, 2])
@@ -153,14 +178,14 @@ with network1:
         # Create an edge trace
         edge_trace = go.Scatter(x=[], 
                                 y=[], 
-                                line=dict(width=1.5, color='#B0AFAE'), ##EFEFEF    
+                                line=dict(width=2, color='#B0AFAE'), ##EFEFEF    #B0AFAE #D7D7D7
                                 hoverinfo='none', 
                                 mode='lines')
         
         # Create a trace of protein similarity edges
         similarity_edge_trace = go.Scatter(x=[], 
                                            y=[], 
-                                           line=dict(width=1.5, color='#D7D7D7', dash='dash'),  
+                                           line=dict(width=2, color='#9C0000', dash='dash'),  
                                            hoverinfo='none', 
                                            mode='lines')
         
