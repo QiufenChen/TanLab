@@ -7,32 +7,26 @@ from matplotlib import cm
 import networkx as nx
 np.random.seed(42)
 
-# Page configure
+# %% Page configure
 st.set_page_config(page_title="📊", layout="wide")
 
 
+# %% Read and filter our data
 my_df = pd.read_excel("./Data/OurData.xlsx")
 idx = my_df.groupby(['Group', 'Drug', 'DrugName', 'Protein_ID', 'Gene'])['H-Score'].idxmax()
 df_unique = my_df.loc[idx]
 df = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
 df['fc'] = df.apply(lambda row: -abs(row['fc']) if row['lasso_score'] == 0 else row['fc'], axis=1)
 
-
-#%%
-# drug_counts = df['Drug'].value_counts()
-# drug_counts_sorted = drug_counts.sort_values(ascending=False)
-# drug_list = drug_counts_sorted.index.tolist()[:21]
-# drug_df = df[df['Drug'].isin(drug_list)]
 drug_df = df
-
-#%%
-# prot_counts = df['Gene'].value_counts()
-# prot_counts_sorted = prot_counts.sort_values(ascending=False)
-# prot_list = prot_counts_sorted.index.tolist()[:21]
-# prot_df = df[df['Gene'].isin(prot_list)]
 prot_df = df
 
-#%%
+
+#%% Load the protein-protein similarity table
+similarity_df = pd.read_csv('./Data/Similarity.csv')  
+
+
+#%% 
 with st.container():
     col1, col2, col3 = st.columns([1, 6, 1])
     with col1:
@@ -56,22 +50,21 @@ with st.container():
         st.image("images/logo.jpg", width=200)
 
 
-#%%
+#%% Abstract information
 st.subheader("Abstract")
 st.write("""
 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 """)
 
+#%% Second panel: 
 landscape, network1, network2 = st.tabs(["1️⃣ Scatter Plot", "2️⃣ Network Interaction (Drug)", "3️⃣ Network Interaction (Target)"])
-
-#%%
 with landscape:
     col1, col2, col3 = st.columns([1, 0.1, 1])
     selected_drug = col1.selectbox(":four_leaf_clover: Select a Drug", drug_df['Drug'].unique())
     selected_hscore = col3.slider(':herb: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
-    # 绘制火山图
+    # Plot vocalo
     col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
         fig = px.scatter(filtered_df, 
@@ -100,16 +93,15 @@ with landscape:
         col2.write('No results found.')
 
 
-#%%
+#%% Drug-Protein
 with network1:
-    col11, col22, col33 = st.columns([1, 1, 1])
+    col11, col22, col33, col44 = st.columns([1, 1, 1, 1])
     selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drug'].unique())
-    layout= col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
-    # selected_hscore = col33.text_input('Set Hscore threshold')
+    layout = col22.selectbox(':fallen_leaf: Choose a network layout',('Random Layout','Spring Layout','Shell Layout','Kamada Kawai Layout'))
     selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
+    selected_smilarity = col44.slider('Set similarity threshold', min_value=50, max_value=100, value=50, step=5)
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
-    # 绘制火山图
     col1, col2, col3 = st.columns([2, 5, 2])
     if not filtered_df.empty:
         
@@ -126,11 +118,15 @@ with network1:
             if not G.has_edge(row['Drug'], row['Gene']):
                 G.add_weighted_edges_from([(row['Drug'], row['Gene'], row['H-Score'])])
                 
-                # G.add_edge(row['Drug'], row['Targets'], weight=row['H-Score'])  
-                # G.add_edge(row['Drug'], row['Targets'], weight=row['H-Score'])
+
+        # Screen the protein-protein pairs that meet the threshold from the similarity table and add them to the network
+        df_pairs = similarity_df[similarity_df['Similarity'] >= selected_smilarity]
+        for index, row in df_pairs.iterrows():
+            if row['Protein1'] in G.nodes() and row['Protein2'] in G.nodes():
+                G.add_edge(row['Protein1'], row['Protein2'], weight=row['Similarity'])
+
         
-        # 获取节点位置
-        #Get the position of each node depending on the user' choice of layout
+        # Get the position of each node depending on the user' choice of layout
         if layout=='Random Layout':
             pos = nx.random_layout(G) 
         elif layout=='Spring Layout':
@@ -140,14 +136,14 @@ with network1:
         elif layout=='Kamada Kawai Layout':
             pos = nx.kamada_kawai_layout(G) 
         
-        #Add positions of nodes to the graph
+        # Add positions of nodes to the graph
         for n, p in pos.items():
             G.nodes[n]['pos'] = p
 
-        # 创建边的trace
+        # Create an edge trace
         edge_trace = go.Scatter(x=[], 
                                 y=[], 
-                                line=dict(width=2, color='#EFEFEF'), ## '#EFEFEF'
+                                line=dict(width=2, color='#EFEFEF'),
                                 hoverinfo='none', 
                                 mode='lines')
         
@@ -190,7 +186,7 @@ with network1:
                                                     )
                                             ))
                     
-        
+        # Set color and shape based on node type
         for node in G.nodes():
             x, y = G.nodes[node]['pos']
             node_trace['x'] += tuple([x])
@@ -218,7 +214,7 @@ with network1:
 
         # 创建Plotly图表
         fig = go.Figure(data=[edge_trace, node_trace], 
-                        layout=go.Layout(title='', #title takes input from the user
+                        layout=go.Layout(title='', # title takes input from the user
                                             title_x=0.45,
                                             titlefont=dict(size=25),
                                             showlegend=False,
@@ -239,7 +235,7 @@ with network1:
         col2.write(f"No data available for {selected_drug} with Hscore > {selected_hscore}.")
 
 
-#%%
+#%% Protein-Drug
 with network2:
     col111, col222, col333 = st.columns([1, 1, 1])
     selected_target = col111.selectbox(":seedling: Select a Target", prot_df['Gene'].unique())
