@@ -178,16 +178,18 @@ with network1:
         # Create an edge trace
         edge_trace = go.Scatter(x=[], 
                                 y=[], 
-                                line=dict(width=2, color='#B0AFAE'), ##EFEFEF    #B0AFAE #D7D7D7
+                                line=dict(width=2, color='#B0AFAE'), ##EFEFEF    #B0AFAE #D7D7D7 #9C0000
                                 hoverinfo='none', 
-                                mode='lines')
+                                mode='lines',
+                                name='Protein-Drug Interaction')
         
         # Create a trace of protein similarity edges
         similarity_edge_trace = go.Scatter(x=[], 
                                            y=[], 
-                                           line=dict(width=2, color='#9C0000', dash='dash'),  
+                                           line=dict(width=2, color='#D7D7D7', dash='dash'),  
                                            hoverinfo='none', 
-                                           mode='lines')
+                                           mode='lines',
+                                           name='Protein-Protein Similarity')
         
         weights = [data['weight'] for _, _, data in G.edges(data=True)]
         min_weight = min(weights)
@@ -201,9 +203,9 @@ with network1:
             # edge_trace['x'] += tuple([x0, x1, None])
             # edge_trace['y'] += tuple([y0, y1, None])
 
-            print(edge[2].get('type'))
+            # print(edge[2].get('type'))
             if edge[2].get('type') == 'similarity':  
-                print("Similarity edge coordinates:", similarity_edge_trace['x'], similarity_edge_trace['y'])
+                # print("Similarity edge coordinates:", similarity_edge_trace['x'], similarity_edge_trace['y'])
 
                 similarity_edge_trace['x'] += tuple([x0, x1, None])
                 similarity_edge_trace['y'] += tuple([y0, y1, None])
