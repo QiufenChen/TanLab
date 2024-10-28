@@ -41,11 +41,11 @@ with st.container():
             "<h1 style='text-align: center; color: black; background-color: white;'>Large-scale target deconvolution reveals insight into the druggable proteome</h1>",
             unsafe_allow_html=True)
 
-        st.markdown("""
-        <p style='text-align: center; color: black; background-color: white;'>
-        Our authors
-        </p>
-        """, unsafe_allow_html=True)
+        # st.markdown("""
+        # <p style='text-align: center; color: black; background-color: white;'>
+        # Our authors
+        # </p>
+        # """, unsafe_allow_html=True)
 
     with col3:
         # 右侧放置实验室logo
