@@ -38,7 +38,7 @@ with st.container():
     with col2:
         # 中间列放置标题和作者
         st.markdown(
-            "<h1 style='text-align: center; color: black; background-color: white;'>Our Title</h1>",
+            "<h1 style='text-align: center; color: black; background-color: white;'>Large-scale target deconvolution reveals insight into the druggable proteome</h1>",
             unsafe_allow_html=True)
 
         st.markdown("""
@@ -56,7 +56,7 @@ with st.container():
 #%% Abstract information
 st.subheader("Abstract")
 st.write("""
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+The vast majority of bioactive compounds exert their cellular effects by interacting and modulating the biological activities of their target proteins. Many small-molecule drugs have unknown targets, while the clinical efficacy of many targeted drugs could be attributed to off-target effects. Systematic target deconvolution of bioactive compounds and drugs could uncover novel therapeutic targets, help drug repurposing, and preempt potential side effects. Here, we chart the putative targets for 1003 FDA-approved drugs through proteome-wide quantification of their effects on protein thermal stability using derivatization-free chemoproteomics with machine learning. Thousands of such drug-protein perturbation relationships are uncovered, which are enriched in known drug-target pairs with many novel associations, including those in close interaction proximity to known targets or co-interacting among themselves. Most perturbed proteins are presently not targeted by drugs or chemicals, including many involved in membrane traffic, transporters, and transcription regulation, suggesting possible modulation of these proteins with small molecules. Off-targets are identified for many drugs, including those that perturb kinases, metabolic enzymes, PARP1, and NUDT1. Novel binders for E3 ligase RNF114 and RNF113A were identified, and we further established them as PROTACs for targeted protein degradation. This work extends our understanding of the druggable human proteome.
 """)
 
 #%% Second panel: 
