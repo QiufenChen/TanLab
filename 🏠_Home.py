@@ -21,7 +21,7 @@ st.set_page_config(page_title="📊", layout="wide")
 # df.to_csv("./Data/OurData_11.csv", index=False)
 
 #%%
-df = pd.read_excel("./Data/OurData.csv")
+df = pd.read_csv("./Data/OurData.csv")
 uniprot_to_gene = dict(zip(df['Protein_ID'], df['Gene']))
 
 drug_df = df
