@@ -13,12 +13,15 @@ st.set_page_config(page_title="📊", layout="wide")
 
 
 # %% Read and filter our data
-my_df = pd.read_excel("./Data/OurData.xlsx")
-idx = my_df.groupby(['Group', 'Drug', 'DrugName', 'Protein_ID', 'Gene'])['H-Score'].idxmax()
-df_unique = my_df.loc[idx]
-df = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
-df['fc'] = df.apply(lambda row: -abs(row['fc']) if row['lasso_score'] == 0 else row['fc'], axis=1)
+# my_df = pd.read_excel("./Data/OurData.xlsx")
+# idx = my_df.groupby(['Group', 'Drug', 'DrugName', 'Protein_ID', 'Gene'])['H-Score'].idxmax()
+# df_unique = my_df.loc[idx]
+# df = df_unique.groupby('Drug').filter(lambda x: len(x) >= 10)
+# df['fc'] = df.apply(lambda row: -abs(row['fc']) if row['lasso_score'] == 0 else row['fc'], axis=1)
+# df.to_csv("./Data/OurData_11.csv", index=False)
 
+#%%
+df = pd.read_excel("./Data/OurData.csv")
 uniprot_to_gene = dict(zip(df['Protein_ID'], df['Gene']))
 
 drug_df = df
