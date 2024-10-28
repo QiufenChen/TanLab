@@ -59,12 +59,11 @@ st.subheader("Abstract")
 abstract = """
 The vast majority of bioactive compounds exert their cellular effects by interacting and modulating the biological activities of their target proteins. Many small-molecule drugs have unknown targets, while the clinical efficacy of many targeted drugs could be attributed to off-target effects. Systematic target deconvolution of bioactive compounds and drugs could uncover novel therapeutic targets, help drug repurposing, and preempt potential side effects. Here, we chart the putative targets for 1003 FDA-approved drugs through proteome-wide quantification of their effects on protein thermal stability using derivatization-free chemoproteomics with machine learning. Thousands of such drug-protein perturbation relationships are uncovered, which are enriched in known drug-target pairs with many novel associations, including those in close interaction proximity to known targets or co-interacting among themselves. Most perturbed proteins are presently not targeted by drugs or chemicals, including many involved in membrane traffic, transporters, and transcription regulation, suggesting possible modulation of these proteins with small molecules. Off-targets are identified for many drugs, including those that perturb kinases, metabolic enzymes, PARP1, and NUDT1. Novel binders for E3 ligase RNF114 and RNF113A were identified, and we further established them as PROTACs for targeted protein degradation. This work extends our understanding of the druggable human proteome.
 """
-
-st.markdown(
-    abstract,
-    unsafe_allow_html=True,
-    style={'font-size': '20px', 'text-align': 'justify'}
-)
+st.markdown("""
+<div style='font-size:20px; text-align:justify;'>
+""" + abstract + """
+</div>
+""", unsafe_allow_html=True)
 
 #%% Second panel: 
 landscape, network1, network2 = st.tabs(["1️⃣ Scatter Plot", "2️⃣ Network Interaction (Drug)", "3️⃣ Network Interaction (Target)"])
