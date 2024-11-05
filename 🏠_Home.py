@@ -141,7 +141,7 @@ with network1:
     selected_drug = col11.selectbox(":maple_leaf: Select a Drug", drug_df['Drug'].unique())
     layout = col22.selectbox(':fallen_leaf: Choose a network layout',('Kamada Kawai Layout','Random Layout','Spring Layout','Shell Layout'))
     selected_hscore = col33.slider(':leaves: Set Hscore threshold', min_value=0.8, max_value=1.0, value=0.8, step=0.01)
-    selected_smilarity = col44.slider(':palm_tree: Set similarity threshold', min_value=25, max_value=100, value=40, step=5)
+    selected_smilarity = col44.slider(':palm_tree: Set sequence similarity threshold', min_value=25, max_value=100, value=40, step=5)
     filtered_df = drug_df[(drug_df['Drug'] == selected_drug) & (drug_df['H-Score'] > selected_hscore)]
 
     col1, col2, col3 = st.columns([2, 5, 2])
