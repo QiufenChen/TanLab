@@ -21,11 +21,10 @@ st.set_page_config(page_title="📊", layout="wide")
 # df.to_csv("./Data/OurData_11.csv", index=False)
 
 #%%
-df = pd.read_csv("./Data/OurData.csv")
-uniprot_to_gene = dict(zip(df['Protein_ID'], df['Gene']))
+drug_df = pd.read_csv("./Data/drug_protein.csv")
+uniprot_to_gene = dict(zip(drug_df['Protein_ID'], drug_df['Gene']))
 
-drug_df = df
-prot_df = df
+prot_df = pd.read_csv("./Data/protein_drug.csv")
 
 
 #%% Load the protein-protein similarity table
