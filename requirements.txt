@@ -1,3 +1,4 @@
+python_version == 3.8.*
 numpy
 pandas
 scipy
@@ -7,6 +8,6 @@ streamlit
 stmol
 py3Dmol
 ipython_genutils
- plotly
+plotly
 networkx
 openpyxl
